@@ -1,0 +1,17 @@
+# Node.js
+node_modules/
+dist/
+.env
+*.log
+
+# Vite cache
+.vite/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# system
+Thumbs.db
