@@ -1,12 +1,87 @@
-# React + Vite
+# 🌤️ Modern Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=FFD62E)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38B2AC?logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-black?logo=framer&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Currently, two official plugins are available:
+A sleek and modern weather app built with **React + Vite + TailwindCSS + Framer Motion**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎥 Preview
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Weather App Demo](public/demo.gif)
+
+*(Replace with your own GIF or screenshot — e.g. `/public/demo.gif` or an uploaded image to GitHub)*
+
+---
+
+## ✨ Demo
+
+🔗 [Live Demo on Vercel](https://your-app-url.vercel.app)  
+
+---
+
+## 📸 Screenshots
+
+(Add screenshots of your app here — PNGs, GIFs, or Loom links)
+
+---
+
+## ⚡ Features
+- Search for any city and instantly view its weather.  
+- **Today’s Forecast**: next 8 hours at a glance.  
+- **7-Day Forecast**: evenly distributed, dynamic grid layout.  
+- Animated results on each search with **Framer Motion**.  
+- Clean UI powered by **TailwindCSS**.  
+
+---
+
+## 🛠️ Tech Stack
+- **React** (with Vite bundler) ⚡
+- **TailwindCSS** for styling 🎨
+- **Framer Motion** for animations 🎬
+- **OpenWeather API** 🌍
+- **Vercel** for deployment 🚀
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js & npm installed.
+
+### Installation
+```bash
+# Clone the repo
+git clone https://github.com/your-username/weather-app.git
+
+# Enter the project folder
+cd weather-app
+
+# Install dependencies
+npm install
+
+# Run locally
+npm run dev
+```
+
+### Environment Variables
+Create a `.env` file in the root:
+```
+VITE_API_KEY=your_openweather_api_key
+```
+
+---
+
+## 📦 Deployment
+This app is deployed with [Vercel](https://vercel.com).  
+Every push to the `main` branch triggers an automatic redeployment.
+
+---
+
+## 📝 License
+MIT License © [Your Name]  
