@@ -15,13 +15,12 @@ A sleek and modern weather app built with **React + Vite + TailwindCSS + Framer 
 
 ![Weather App Demo](public/demo.gif)
 
-*(Replace with your own GIF or screenshot — e.g. `/public/demo.gif` or an uploaded image to GitHub)*
 
 ---
 
 ## ✨ Demo
 
-🔗 [Live Demo on Vercel](https://your-app-url.vercel.app)  
+🔗 [Live Demo on Vercel](https://modern-weather-app-peach.vercel.app/)  
 
 ---
 
