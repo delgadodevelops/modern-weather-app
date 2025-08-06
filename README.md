@@ -25,12 +25,6 @@ A sleek and modern weather app built with **React + Vite + TailwindCSS + Framer 
 
 ---
 
-## 📸 Screenshots
-
-(Add screenshots of your app here — PNGs, GIFs, or Loom links)
-
----
-
 ## ⚡ Features
 - Search for any city and instantly view its weather.  
 - **Today’s Forecast**: next 8 hours at a glance.  
@@ -84,4 +78,4 @@ Every push to the `main` branch triggers an automatic redeployment.
 ---
 
 ## 📝 License
-MIT License © [Your Name]  
+MIT License © [David Delgado]  
