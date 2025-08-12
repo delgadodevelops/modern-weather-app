@@ -1,23 +1,31 @@
 // src/components/Forecast.jsx
 import React from "react";
+import ForecastCard from "./ui/ForecastCard";
 import weatherIcons from "../utils/weatherIcons";
 
 const Forecast = ({ daily }) => {
   if (!daily || daily.length === 0) return null;
 
+  // parent in App gives this container flex-1; we fill it with 7 rows
   return (
     <div className="grid grid-rows-7 gap-3 h-full">
-      {daily.map((day, i) => {
-        const icon = weatherIcons[day.condition] || weatherIcons["Clouds"];
+      {daily.slice(0, 7).map((day, i) => {
+        // use your custom icon map if available, else fall back to OWM code if you stored it
+        const mapped = weatherIcons?.[day.condition];
+        const icon =
+          mapped ||
+          (day.icon
+            ? `https://openweathermap.org/img/wn/${day.icon}@2x.png`
+            : null);
+
         return (
-          <div
+          <ForecastCard
             key={i}
-            className="flex justify-between items-center bg-[#111827] rounded-xl p-4"
-          >
-            <span className="text-gray-300">{day.date}</span>
-            <img src={icon} alt={day.desc} className="w-8 h-8" />
-            <span className="font-semibold">{day.temp}°C</span>
-          </div>
+            variant="row" // full-width row layout
+            top={day.date} // "Today", "Wed", etc.
+            icon={icon}
+            mid={`${day.temp}°C`}
+          />
         );
       })}
     </div>

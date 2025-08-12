@@ -12,18 +12,35 @@ const WeatherMain = ({ weather }) => {
   const icon = weatherIcons[condition] || weatherIcons["Clouds"];
 
   return (
-    <div className="flex justify-between items-center p-8 backdrop-blur-lg w-full">
-      {/* Left Side */}
-      <div>
-        <h1 className="text-6xl font-bold mb-3 text-white">{name}</h1>
-        <p className="text-gray-300 capitalize">{desc}</p>
-        <h2 className="text-5xl font-bold mt-6 text-white">{temp}°C</h2>
+    <div
+      className="
+        w-full flex items-center
+        p-5 sm:p-6 lg:p-8
+        backdrop-blur-lg
+        gap-4 sm:gap-6 lg:gap-10
+      "
+    >
+      {/* Left: City Info */}
+      <div className="flex-1 min-w-0">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 lg:mb-3 text-white truncate">
+          {name}
+        </h1>
+        <p className="text-gray-300 capitalize text-base sm:text-lg lg:text-xl truncate">
+          {desc}
+        </p>
+        <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mt-4 text-white">
+          {temp}°C
+        </h2>
       </div>
 
-      {/* Right Side */}
-      <div className="flex flex-col items-center mr-32">
-        <img src={icon} alt={condition} className="w-36 h-36" />
-        <p className="text-gray-300 mt-4">
+      {/* Right: Icon + High/Low */}
+      <div className="flex flex-col items-center flex-shrink-0">
+        <img
+          src={icon}
+          alt={condition}
+          className="w-24 h-24 sm:w-28 sm:h-28 lg:w-36 lg:h-36"
+        />
+        <p className="text-gray-300 mt-3 text-sm sm:text-base lg:text-lg">
           H: {Math.round(main.temp_max)}° / L: {Math.round(main.temp_min)}°
         </p>
       </div>
