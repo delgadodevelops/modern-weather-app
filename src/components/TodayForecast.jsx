@@ -11,7 +11,7 @@ const TodayForecast = ({ hourly = [] }) => {
   const Card = ({ h }) => (
     <motion.div
       whileHover={{ y: -2 }}
-      className={`${CARD_BG} rounded-xl px-3 py-3 flex flex-col items-center justify-center
+      className={`${CARD_BG} rounded-xl  bg-white/5 px-3 py-3 flex flex-col items-center justify-center
                   shrink-0 w-24 h-28 sm:w-auto sm:h-28 shadow-sm`}
     >
       <span className="text-[11px] text-gray-300">{h.time}</span>

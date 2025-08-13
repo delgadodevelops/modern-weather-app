@@ -8,7 +8,7 @@ const Forecast = ({ daily }) => {
 
   // parent in App gives this container flex-1; we fill it with 7 rows
   return (
-    <div className="grid grid-rows-7 gap-3 h-full">
+    <div className="grid grid-rows-7  gap-3 h-full">
       {daily.slice(0, 7).map((day, i) => {
         // use your custom icon map if available, else fall back to OWM code if you stored it
         const mapped = weatherIcons?.[day.condition];
@@ -25,6 +25,7 @@ const Forecast = ({ daily }) => {
             top={day.date} // "Today", "Wed", etc.
             icon={icon}
             mid={`${day.temp}°C`}
+            className=" bg-white/5"
           />
         );
       })}

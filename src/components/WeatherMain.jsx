@@ -15,14 +15,13 @@ const WeatherMain = ({ weather }) => {
     <div
       className="
         w-full flex items-center
-        p-5 sm:p-6 lg:p-8
-        backdrop-blur-lg
+        p-5 sm:p-6 lg:p-10
         gap-4 sm:gap-6 lg:gap-10
       "
     >
       {/* Left: City Info */}
       <div className="flex-1 min-w-0">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 lg:mb-3 text-white truncate">
+        <h1 className="text-4xl sm:text-5xl lg:text-8xl font-bold mb-2 lg:mb-3 text-white truncate">
           {name}
         </h1>
         <p className="text-gray-300 capitalize text-base sm:text-lg lg:text-xl truncate">
@@ -34,13 +33,13 @@ const WeatherMain = ({ weather }) => {
       </div>
 
       {/* Right: Icon + High/Low */}
-      <div className="flex flex-col items-center flex-shrink-0">
+      <div className="flex flex-col items-center flex-shrink-0 ">
         <img
           src={icon}
           alt={condition}
-          className="w-24 h-24 sm:w-28 sm:h-28 lg:w-36 lg:h-36"
+          className="w-24 h-24 sm:w-28 sm:h-28 lg:w-56 lg:h-56"
         />
-        <p className="text-gray-300 mt-3 text-sm sm:text-base lg:text-lg">
+        <p className="text-gray-300 font-semibold mt-3 text-sm sm:text-base lg:text-lg">
           H: {Math.round(main.temp_max)}° / L: {Math.round(main.temp_min)}°
         </p>
       </div>

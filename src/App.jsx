@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import SearchBar from "./components/SearchBar";
@@ -5,10 +6,10 @@ import WeatherMain from "./components/WeatherMain";
 import TodayForecast from "./components/TodayForecast";
 import Forecast from "./components/Forecast";
 import Conditions from "./components/Conditions";
+import weatherIcons from "./utils/weatherIcons";
 import { AnimatePresence, motion } from "framer-motion";
 
-const API_KEY =
-  import.meta.env.VITE_API_KEY || "c7c9c87e1f5253db1d2bb054446987a9";
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 const App = () => {
   const [city, setCity] = useState("Miami");
@@ -17,19 +18,20 @@ const App = () => {
 
   const fetchWeather = async (cityName) => {
     try {
-      // Current Weather (for today)
       const res1 = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+          cityName
+        )}&appid=${API_KEY}&units=metric`
       );
       const data1 = await res1.json();
 
-      // 5-day / 3-hour Forecast
       const res2 = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(
+          cityName
+        )}&appid=${API_KEY}&units=metric`
       );
       const data2 = await res2.json();
 
-      // Hourly Forecast (next 8 intervals, ~24 hours)
       const hourly = data2.list.slice(0, 8).map((r) => ({
         time: new Date(r.dt * 1000).toLocaleTimeString("en-US", {
           hour: "numeric",
@@ -39,7 +41,6 @@ const App = () => {
         condition: r.weather[0].main,
       }));
 
-      // "Today"
       const today = {
         date: "Today",
         temp: Math.round(data1.main.temp),
@@ -47,7 +48,6 @@ const App = () => {
         condition: data1.weather[0].main,
       };
 
-      // Following days at noon
       let nextDays = data2.list
         .filter((r) => r.dt_txt.includes("12:00:00"))
         .slice(0, 6)
@@ -60,7 +60,6 @@ const App = () => {
           condition: r.weather[0].main,
         }));
 
-      // Pad if fewer than 6 entries; roll weekday forward to avoid duplicates
       while (nextDays.length < 6) {
         const last = nextDays[nextDays.length - 1] || today;
         const baseDate = new Date();
@@ -74,7 +73,6 @@ const App = () => {
       }
 
       const daily = [today, ...nextDays];
-
       setWeather(data1);
       setForecast({ hourly, daily });
     } catch (err) {
@@ -82,22 +80,29 @@ const App = () => {
     }
   };
 
-  // Dynamic tab title
-  useEffect(() => {
-    if (weather) document.title = `${city} Weather 🌤️`;
-    else document.title = "Weather App 🌤️";
-  }, [weather, city]);
-
   useEffect(() => {
     fetchWeather(city);
   }, []);
 
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 30 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut", delay },
+    },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.25 } },
+  });
+
+  useEffect(() => {
+    if (weather) document.title = `${city} Weather 🌤️`;
+  }, [weather, city]);
+
   return (
     <div className="flex min-h-screen bg-[#111827] text-white">
-      {/* Sidebar (handles its own hamburger button) */}
       <Sidebar />
 
-      {/* Mobile Top Bar: centered title, leaves space for sidebar hamburger on the left */}
+      {/* Mobile Top Bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-[#111827] z-40">
         <div className="h-14 flex items-center justify-center px-4">
           <h1 className="text-white font-semibold text-base">
@@ -106,75 +111,66 @@ const App = () => {
         </div>
       </div>
 
-      {/* Animated Dashboard */}
       <AnimatePresence mode="wait">
         {weather && (
           <motion.div
-            key={city}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex-1 w-full"
+            key={`${city}-${weather?.dt ?? ""}`}
+            {...fadeUp(0)}
+            className="flex-1 p-6 pt-16 lg:pt-6 grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
-            {/* Add top padding only on mobile to clear the fixed top bar */}
-            <div className="p-6 pt-16 lg:pt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left Side (2 cols) */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* Search + Main Weather */}
-                <motion.div
-                  key="main-weather"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <div className="mb-4">
-                    <SearchBar
-                      onSearch={(val) => {
-                        setCity(val);
-                        fetchWeather(val);
-                      }}
-                    />
-                  </div>
-                  <WeatherMain weather={weather} />
-                </motion.div>
+            {/* LEFT */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              <motion.div {...fadeUp(0.1)}>
+                <SearchBar
+                  onSearch={(val) => {
+                    setCity(val);
+                    fetchWeather(val);
+                  }}
+                />
+              </motion.div>
 
-                {/* Today’s Forecast (Hourly) */}
-                <motion.div
-                  key="today-forecast"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                >
-                  <TodayForecast hourly={forecast.hourly} />
-                </motion.div>
+              <motion.div {...fadeUp(0.2)} className="flex-1">
+                <WeatherMain weather={weather} />
+              </motion.div>
 
-                {/* Conditions */}
-                <motion.div
-                  key="conditions"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  className="bg-[#1F2937] rounded-2xl p-6 shadow-lg"
-                >
-                  <Conditions weather={weather} />
-                </motion.div>
-              </div>
+              <motion.div {...fadeUp(0.3)}>
+                <TodayForecast hourly={forecast.hourly} />
+              </motion.div>
 
-              {/* Right Side (7-Day Forecast) */}
               <motion.div
-                key="seven-day"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="bg-[#1F2937] rounded-2xl p-6 shadow-lg flex flex-col"
+                {...fadeUp(0.4)}
+                className="bg-[#1F2937] rounded-2xl p-6 shadow-lg"
               >
-                <h2 className="text-lg font-semibold mb-6">7-Day Forecast</h2>
-                <div className="flex-1">
-                  <Forecast daily={forecast.daily} />
-                </div>
+                <Conditions weather={weather} />
               </motion.div>
             </div>
+
+            {/* RIGHT */}
+            <motion.div
+              {...fadeUp(0.5)}
+              className="bg-[#1F2937] rounded-2xl p-6 shadow-lg flex flex-col"
+            >
+              <h2 className="text-lg font-semibold mb-6">7-Day Forecast</h2>
+              <div className="grid grid-rows-7 gap-4 flex-1">
+                {forecast.daily.map((day, i) => {
+                  const icon =
+                    weatherIcons[day.condition] || weatherIcons["Clouds"];
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, delay: 0.55 + i * 0.05 }}
+                      className="flex justify-between items-center bg-[#111827] rounded-xl p-4"
+                    >
+                      <span className="text-gray-300">{day.date}</span>
+                      <img src={icon} alt={day.desc} className="w-8 h-8" />
+                      <span className="font-semibold">{day.temp}°C</span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
