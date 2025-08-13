@@ -29,8 +29,6 @@ const SearchBar = ({ onSearch }) => {
   const inputRef = useRef(null);
   const listRef = useRef(null);
 
-  const disabled = city.trim().length === 0 || loading;
-
   const saveRecent = (value) => {
     const next = [
       value,
@@ -66,7 +64,7 @@ const SearchBar = ({ onSearch }) => {
   useEffect(() => {
     const q = debouncedCity.trim();
 
-    // If no API key or very short query: show recent only (if any) and bail
+    // If no API key or very short query: show recent only (if any)
     if (!API_KEY || q.length < 2) {
       setSuggestions([]);
       setOpen(
@@ -192,7 +190,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="relative z-[60] w-full max-w-xl mx-auto">
+    <div className="relative z-20 w-full max-w-xl mx-auto">
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 20 }}
@@ -237,7 +235,7 @@ const SearchBar = ({ onSearch }) => {
           disabled={geoLoading || !API_KEY}
           className={`
             h-12 px-3 sm:px-4
-            flex items-center justify-center
+            flex items-center justify-center leading-none
             text-white/80 hover:text-white
             ${geoLoading ? "opacity-60 cursor-wait animate-pulse" : ""}
           `}
@@ -265,7 +263,7 @@ const SearchBar = ({ onSearch }) => {
           disabled={city.trim().length === 0 || loading}
           className={`
             h-12 px-5 sm:px-6
-            flex items-center justify-center
+            flex items-center justify-center leading-none
             bg-gradient-to-r from-blue-400 to-indigo-500
             font-semibold
             ${
@@ -287,7 +285,7 @@ const SearchBar = ({ onSearch }) => {
           ref={listRef}
           id="search-suggestions"
           className="
-            absolute left-0 right-0 mt-2
+            absolute left-0 right-0 mt-2 z-20
             bg-[#111827] border border-white/10 rounded-xl shadow-2xl
             max-h-72 overflow-y-auto
           "
@@ -311,7 +309,7 @@ const SearchBar = ({ onSearch }) => {
           ))}
 
           {recent.length > 0 && (
-            <div className="flex justify-end border-t border-white/10">
+            <div className="flex justify-end border-top border-white/10">
               <button
                 onClick={() => {
                   setRecent([]);

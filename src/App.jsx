@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import SearchBar from "./components/SearchBar";
@@ -18,6 +17,7 @@ const App = () => {
 
   const fetchWeather = async (cityName) => {
     try {
+      // Current Weather
       const res1 = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
           cityName
@@ -25,6 +25,7 @@ const App = () => {
       );
       const data1 = await res1.json();
 
+      // 5-day / 3-hour Forecast
       const res2 = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(
           cityName
@@ -32,6 +33,7 @@ const App = () => {
       );
       const data2 = await res2.json();
 
+      // Hourly (next ~24h, 8 intervals)
       const hourly = data2.list.slice(0, 8).map((r) => ({
         time: new Date(r.dt * 1000).toLocaleTimeString("en-US", {
           hour: "numeric",
@@ -41,6 +43,7 @@ const App = () => {
         condition: r.weather[0].main,
       }));
 
+      // Today from current weather
       const today = {
         date: "Today",
         temp: Math.round(data1.main.temp),
@@ -48,6 +51,7 @@ const App = () => {
         condition: data1.weather[0].main,
       };
 
+      // Next 6 days (noon snapshots)
       let nextDays = data2.list
         .filter((r) => r.dt_txt.includes("12:00:00"))
         .slice(0, 6)
@@ -60,6 +64,7 @@ const App = () => {
           condition: r.weather[0].main,
         }));
 
+      // Pad to ensure 7 total (Today + 6)
       while (nextDays.length < 6) {
         const last = nextDays[nextDays.length - 1] || today;
         const baseDate = new Date();
@@ -73,6 +78,7 @@ const App = () => {
       }
 
       const daily = [today, ...nextDays];
+
       setWeather(data1);
       setForecast({ hourly, daily });
     } catch (err) {
@@ -84,6 +90,7 @@ const App = () => {
     fetchWeather(city);
   }, []);
 
+  // Reusable motion variants
   const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 30 },
     animate: {
@@ -94,15 +101,17 @@ const App = () => {
     exit: { opacity: 0, y: -20, transition: { duration: 0.25 } },
   });
 
+  // Optional: dynamic tab title
   useEffect(() => {
     if (weather) document.title = `${city} Weather 🌤️`;
   }, [weather, city]);
 
   return (
     <div className="flex min-h-screen bg-[#111827] text-white">
+      {/* Sidebar */}
       <Sidebar />
 
-      {/* Mobile Top Bar */}
+      {/* Mobile Top Bar (title stays below sidebar) */}
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-[#111827] z-40">
         <div className="h-14 flex items-center justify-center px-4">
           <h1 className="text-white font-semibold text-base">
@@ -111,14 +120,15 @@ const App = () => {
         </div>
       </div>
 
+      {/* Animate whole dashboard on each search result */}
       <AnimatePresence mode="wait">
         {weather && (
           <motion.div
-            key={`${city}-${weather?.dt ?? ""}`}
+            key={`${city}-${weather?.dt ?? ""}`} // re-mount on new city/data
             {...fadeUp(0)}
             className="flex-1 p-6 pt-16 lg:pt-6 grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
-            {/* LEFT */}
+            {/* LEFT (2 cols) */}
             <div className="lg:col-span-2 flex flex-col gap-6">
               <motion.div {...fadeUp(0.1)}>
                 <SearchBar
@@ -145,7 +155,7 @@ const App = () => {
               </motion.div>
             </div>
 
-            {/* RIGHT */}
+            {/* RIGHT (7-Day) */}
             <motion.div
               {...fadeUp(0.5)}
               className="bg-[#1F2937] rounded-2xl p-6 shadow-lg flex flex-col"
